@@ -37,6 +37,7 @@ export default function Dashboard() {
   const [allUsers, setAllUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [seeding, setSeeding] = useState(false);
+  const [seedCount, setSeedCount] = useState(60);
 
   // global live ledger feed
   const [ledger, setLedger] = useState([]);
@@ -57,7 +58,7 @@ export default function Dashboard() {
     resetMessages();
     setSeeding(true);
     try {
-      const result = await seedDemoData();
+      const result = await seedDemoData(seedCount);
       setActionMessage(`Seeded: ${result.batchesMinted} batches minted, ${result.transfersRecorded} transfers, ${result.recyclingLoopsClosed} loops closed`);
       loadBatches();
       loadLedger();
@@ -491,13 +492,23 @@ export default function Dashboard() {
           <div className="mt-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-1">
               <h2 className="font-bold text-slate-900">Facility Verification</h2>
-              <button
-                onClick={handleSeedDemoData}
-                disabled={seeding}
-                className="text-xs px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-white font-semibold disabled:opacity-60"
-              >
-                {seeding ? 'Seeding…' : 'Seed Demo Data'}
-              </button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max="500"
+                  value={seedCount}
+                  onChange={(e) => setSeedCount(Number(e.target.value))}
+                  className="w-16 text-xs px-2 py-1.5 border border-slate-300 rounded-lg"
+                />
+                <button
+                  onClick={handleSeedDemoData}
+                  disabled={seeding}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-700 text-white font-semibold disabled:opacity-60"
+                >
+                  {seeding ? 'Seeding…' : 'Seed Demo Data'}
+                </button>
+              </div>
             </div>
             <p className="text-xs text-slate-400 mb-4">
               Manufacturers and recyclers can't mint or issue certificates until verified here —

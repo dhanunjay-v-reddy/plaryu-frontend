@@ -15,7 +15,8 @@ export async function unverifyUser(userId) {
   return response.data;
 }
 
-export async function seedDemoData() {
-  const response = await api.post('/admin/seed-demo-data');
+export async function seedDemoData(count) {
+  const query = count ? `?count=${count}` : '';
+  const response = await api.post(`/admin/seed-demo-data${query}`);
   return response.data;
 }
